@@ -1,20 +1,42 @@
-version: "3"
+version: "3.2"
 services:
   app:
-    image: starsaminf/reactjs:docker-compose
-    volumes:
-     - ./:/src
-    working_dir: /src
     container_name: app
+    image: starsaminf/reactjs:docker-compose
+    networks:
+      - back
+    volumes:
+     - app-data:/src
+    working_dir: /src
     restart: always
     ports:
       - "3000:3000"
-    links:
-      - mongo
+  
   mongo:
     container_name: mongo
     image: mongo
+    networks:
+      - back
     volumes:
-      - ./data:/data/db
+      - mongo-data:/data/db
     ports:
       - "27017:27017"
+
+networks:
+  back:
+    driver: bridge 
+
+volumes:
+  app-data:
+    driver: local
+    driver_opts:
+      device: $PWD
+      o: bind
+      type: none
+
+  mongo-data:
+    driver: local
+    driver_opts:
+      device: $PWD/data
+      o: bind
+      type: none
