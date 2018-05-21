@@ -11,6 +11,8 @@ services:
     restart: always
     ports:
       - "3000:3000"
+    command: npm start --progress --host 0.0.0.0
+    tty: true
   
   mongo:
     container_name: mongo
